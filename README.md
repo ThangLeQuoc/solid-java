@@ -127,6 +127,31 @@ public class Eagle extends Bird implements Flyable {
 }
 ```
 
+Extracting the behavior out of the abstract class seem to be a good way. Later on, the bird simulator expands at bigger scale to be **Animal Simulator** program. **Bat** is added, it's not a bird but it can fly. The implementation is easy, we don't have to change anything.
+
+```
+public class Bat implements Flyable{
+    @Override
+    public void fly() {
+	System.out.println("I often fly at night, like Batman");
+    }
+}
+```
+
+```
+@Test
+public void testFlyableAnimal_WithInterfaceImplementation() {
+    Flyable eagle = new Eagle();
+    Flyable mallardDuck = new MallardDuck();
+    Flyable bat = new Bat();
+    List<Flyable> flyableAnimals = new ArrayList<>(Arrays.asList(eagle, mallardDuck, bat));
+    for (Flyable flyable : flyableAnimals) {
+        flyable.fly();
+    }
+}
+```
+This approach consider a **_Flyable_** animal and a **Bird** type animal respectively.
+
 
 
 

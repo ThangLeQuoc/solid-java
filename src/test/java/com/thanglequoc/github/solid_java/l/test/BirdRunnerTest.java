@@ -6,21 +6,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.thanglequoc.github.solid_java.l.Bat;
 import com.thanglequoc.github.solid_java.l.Bird;
 import com.thanglequoc.github.solid_java.l.Eagle;
+import com.thanglequoc.github.solid_java.l.Flyable;
 import com.thanglequoc.github.solid_java.l.MallardDuck;
 import com.thanglequoc.github.solid_java.l.Penguin;
 
 public class BirdRunnerTest {
-    
-    @Test
-    public void testBirdRun() {
-	Bird bird = new Eagle();
-	bird.fly();
-	
-	bird = new MallardDuck();
-	bird.fly();
-    }
     
     @Test
     public void testFlyableBirds() {
@@ -30,11 +23,24 @@ public class BirdRunnerTest {
 	List<Bird> birds = new ArrayList<>(Arrays.asList(eagle, mallardDuck, penguin));
 	
 	/*test fly */
+	/*
 	for (Bird bird : birds) {
 	    if (bird.isFlyable()) {
 		bird.fly();
 	    }
 	}
+	*/
 	
+    }
+    
+    @Test
+    public void testFlyableAnimal_WithInterfaceImplementation() {
+	Flyable eagle = new Eagle();
+	Flyable mallardDuck = new MallardDuck();
+	Flyable bat = new Bat();
+	List<Flyable> flyableAnimals = new ArrayList<>(Arrays.asList(eagle, mallardDuck, bat));
+	for (Flyable flyable : flyableAnimals) {
+	    flyable.fly();
+	}
     }
 }

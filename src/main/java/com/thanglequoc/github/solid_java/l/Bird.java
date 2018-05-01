@@ -30,8 +30,6 @@ public abstract class Bird {
 	return flightDistance;
     }
     
-    public abstract void fly();
-    
     public void setFlyable(boolean flyable) {
 	this.flyable = flyable;
     }

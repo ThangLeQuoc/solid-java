@@ -10,7 +10,7 @@ The **LSP** is a particular definition of subtyping relation, called **(strong) 
 
 Let's move to the real case study:  (reference from [this article][Tom Dalling - The Liskov Substitution principle])
 
-Let's create a bird simulator program. Bird start with basic stuff: _name_, _location_ and _flight distance_
+Let's create a bird simulator program. A bird start with basic stuff: _name_, _location_ and _flight distance_, and a _fly_ behavior
 ```
 public abstract class Bird {
     private String name;
@@ -37,8 +37,95 @@ public class MallardDuck extends Bird
     }
 }
 ```
+It's time to create some birds for a test run:
+```
+@Test
+public void testBirdRun() {
+  Bird bird = new Eagle();
+  bird.fly();
 
-And a new type of bird come, **Penguin** and **Ostrich**, and the truth be told, **they can't fly** !
+  bird = new MallardDuck();
+  bird.fly();
+}
+```
+
+>I'm flying high, across the mountain !
+I can fly at small distance
+
+
+And some new types of bird come: **Penguin** and **Ostrich**, the truth be told, **they can't fly** !
+
+```
+public class Penguin extends Bird {
+
+    @Override
+    public void fly() {
+	//This bird is not suppose to fly !, it's weird to implement this method
+    }
+
+}
+```
+>If an override method **does nothing** or just **throws an exception**, then you're probably violating the LSP.
+
+At first, the design isn't good. **Bird** class is making assumption that every bird can fly.
+
+#### Solution 1: Create a flag in **Bird** to indicate if this bird can fly
+```
+public abstract class Bird {
+    private String name;
+    private String location;
+    private int flightDistance;
+    private boolean flyable = true;
+}
+```
+We set it to _true_ as most of the bird can fly, and for the rest of flightless birds, this flag will be overridden
+
+```
+public class Penguin extends Bird {
+
+    public Penguin() {
+	super.setFlyable(false);
+    }
+}
+```
+
+When the client want a bird to _fly_, it has to check if the bird can fly to make sure that nothing goes wrong
+```
+@Test
+public void testFlyableBirds() {
+  Bird eagle = new Eagle();
+  Bird mallardDuck = new MallardDuck();
+  Bird penguin = new Penguin();
+  List<Bird> birds = new ArrayList<>(Arrays.asList(eagle, mallardDuck, penguin));
+
+  /*test fly */
+  for (Bird bird : birds) {
+    if (bird.isFlyable()) {
+      bird.fly();
+    }
+  }
+
+}
+```
+
+>This is really a band-aid solution. It hasn't fixed the underlying problem. It just provides a way to check whether the problem exists for a particular object.
+
+#### Solution 2: Create interface _flyable_
+We create an interface _Flyable_ , and only bird type which can fly will implement this interface. The _fly_ behavior of abstract class _Bird_ is removed since we finally find out not every bird can fly.
+```
+public interface Flyable {
+    public void fly();
+}
+```
+
+```
+public class Eagle extends Bird implements Flyable {
+    @Override
+    public void fly() {
+	System.out.println("I'm flying high, across the mountain !");
+    }
+}
+```
 
 
 

@@ -4,6 +4,7 @@ public abstract class Bird {
     private String name;
     private String location;
     private int flightDistance;
+    private boolean flyable = true;
     
     public void setName(String name) {
 	this.name = name;
@@ -30,5 +31,13 @@ public abstract class Bird {
     }
     
     public abstract void fly();
+    
+    public void setFlyable(boolean flyable) {
+	this.flyable = flyable;
+    }
+    
+    public boolean isFlyable() {
+	return flyable;
+    }
     
 }
